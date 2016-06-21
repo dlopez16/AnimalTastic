@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Animal Tastic</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/index.css">
+
+
+</head>
+<body>
+	<div class="container">
+	<!-- buttons will get dumped here-->
+		<div id="buttonsView"></div>
+		<form id="animalForm">
+			<label for="animalInput"> Add an Animal</label>
+			<input type="text" id="animalInput"><br>
+
+			<input id="addAnimal" type="submit" value="Add an Animal">
+		</form>
+
+
+
+
+	</div>
+
+<script src='http://code.jquery.com/jquery-2.1.3.min.js'></script>
+<script type="text/javascript">
+
+	var animals = ['wolf','lion','shark'];
+
+
+		function displayAnimalInfo(){
+				var animal = $(this).attr('data-name');
+				var queryURL = 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&q=' + animal;
+
+				
+				
+				$.ajax({url: queryURL, method: 'GET'}).done(function(response) {
+					
+					var animalDiv = $('<div>');
+
+					
+					var rating = response.Rated;
+					
+					var pOne = $('<p>').text( "Rating: " + rating);
+					
+					animalDiv.append(pOne);
+					
+					var image = $('<img>').attr("src", response.Poster);
+					
+					animalDiv.append(image);
+				
+					$('#buttonsView').prepend(animalDiv);
+				});
+			
+
+
+		}
+
+
+
+
+
+
+			function renderButtons(){
+
+			$("#buttonsView").empty();
+				for(i= 0; i< animals.length; i++){
+					var b = $("<button>").text(animals[i])
+						$("#buttonsView").append(b)
+					}
+				}
+			$('#addAnimal').on('click', function(){
+
+			
+
+				var animal = $('#animalInput').val().trim();
+
+		
+				animals.push(animal);
+				
+				
+				renderButtons();
+
+				
+				return false;
+			});
+
+			
+
+			
+			renderButtons();
+
+	$(document).on('click', '.animals', displayAnimalInfo);
+
+
+	
+	renderButtons();
+
+
+</script>
+</body>
+</html>
